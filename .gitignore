@@ -15,3 +15,4 @@ ipch
 *.sln
 *.suo
 *.user
+/StdTest/data
