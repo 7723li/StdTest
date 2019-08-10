@@ -13,22 +13,19 @@
 #include <assert.h>
 #include <list>
 #include <map>
+#include <ctime>
 
 #include "hidapi.h"
 #include "libusb.h"
+#include "gtest/gtest.h"
 
 #pragma comment(lib, "hidapi.lib")
 #pragma comment(lib, "libusb-1.0.lib")
+#pragma comment(lib, "gtestd.lib")
+#pragma comment(lib, "gtest_maind.lib")
 
-void clocking(void(*func)(void))
-{
-	clock_t start = clock();
-
-	func();
-
-	clock_t end = clock();
-	printf("%lf\n", (double)(end - start) / CLK_TCK);
-}
+typedef char(&no_type)[2];
+typedef char yes_type[2];
 
 void findEndPoint(libusb_device* dev, uint8_t & endpoint_in, uint8_t & endpoint_out)
 {
@@ -60,31 +57,65 @@ void findEndPoint(libusb_device* dev, uint8_t & endpoint_in, uint8_t & endpoint_
 	}
 }
 
+int foo(int a, int b)
+{
+	if (0 == a && 0 == b)
+	{
+		throw "gtest test";
+	}
+	int c = a % b;
+	if (0 == c)
+		return b;
+
+	return foo(b, c);
+}
+TEST(footest, handlenonezeroinput)
+{
+	EXPECT_EQ(2, foo(4, 10));
+	EXPECT_EQ(6, foo(30, 18));
+}
+
+void clocking(void(*func)(void))
+{
+	clock_t start = clock();
+
+	func();
+
+	clock_t end = clock();
+	printf("%lf\n", (double)(end - start) / CLK_TCK);
+}
+
 int _tmain(int argc, _TCHAR* argv[])
 {
 	// from VS2010
 
-	/*int time = 60 * 60 ;
+	printf("%d\n", sizeof(yes_type));
+
+	/*testing::InitGoogleTest(&argc, argv);
+	int test = RUN_ALL_TESTS();
+	printf("test : %d\n", test);*/
+
+	/*int time = 60 * 60;
 	int fps = 54;
 	int imgsize = 1280 * 960;
-	
+
 	unsigned char* img = new unsigned char[imgsize];
 	memset(img, imgsize, '0');
 	std::vector<std::vector<unsigned char>> MatCache;
 	for (int i = 0; i < time * fps; ++i)
 	{
-		std::vector<unsigned char> imgCache;
-		imgCache.assign(img, img + imgsize);
-		if (0 == i)
-			imgCache[0] = '1';
-		try
-		{
-			MatCache.push_back(imgCache);
-		}
-		catch (...)
-		{
-			break;
-		}
+	std::vector<unsigned char> imgCache;
+	imgCache.assign(img, img + imgsize);
+	if (0 == i)
+	imgCache[0] = '1';
+	try
+	{
+	MatCache.push_back(imgCache);
+	}
+	catch (...)
+	{
+	break;
+	}
 	}
 	printf("%d\n", MatCache.size());*/
 
