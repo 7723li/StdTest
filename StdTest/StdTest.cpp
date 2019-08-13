@@ -25,7 +25,6 @@
 #pragma comment(lib, "gtest_maind.lib")
 
 typedef char(&no_type)[2];
-typedef char yes_type[2];
 
 void findEndPoint(libusb_device* dev, uint8_t & endpoint_in, uint8_t & endpoint_out)
 {
@@ -89,7 +88,7 @@ int _tmain(int argc, _TCHAR* argv[])
 {
 	// from VS2010
 
-	printf("%d\n", sizeof(yes_type));
+	printf("%d\n", sizeof(no_type));
 
 	/*testing::InitGoogleTest(&argc, argv);
 	int test = RUN_ALL_TESTS();
